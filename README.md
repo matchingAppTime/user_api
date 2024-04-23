@@ -28,3 +28,9 @@ $ docker-compose run --entrypoint "poetry install --no-root" user-api-app
 ```
 $ docker-compose build --no-cache
 ```
+
+起動
+```
+$ docker-compose up
+```
+http://localhost:8000/docs にアクセス
