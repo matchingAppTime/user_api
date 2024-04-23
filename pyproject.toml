@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "user-api-app"
+version = "0.1.0"
+description = ""
+authors = ["None"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110.2"
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
+sqlalchemy = "^2.0.29"
+aiomysql = "^0.2.0"
+pymysql = "^1.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
