@@ -29,3 +29,19 @@
 * BAN_STATUS
   * TINYINT(1)
   * BANしているかどうか、正常:0 BAN:1
+  
+
+```
+mysql> DESC USER_INFO;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id         | int          | NO   | PRI | NULL    | auto_increment |
+| cognito_id | varchar(200) | YES  |     | NULL    |                |
+| email      | varchar(200) | YES  |     | NULL    |                |
+| nick_name  | varchar(30)  | YES  |     | NULL    |                |
+| sex        | int          | YES  |     | NULL    |                |
+| birth      | int          | YES  |     | NULL    |                |
+| ban_status | tinyint(1)   | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+```
