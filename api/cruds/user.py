@@ -40,15 +40,15 @@ async def search_users(
     :param ban_status: バン状態
     """
     query = select(user_model.User)
-    if cognito_id:
+    if cognito_id is not None:
         query = query.where(user_model.User.cognito_id == cognito_id)
-    if email:
+    if email is not None:
         query = query.where(user_model.User.email == email)
-    if nick_name:
+    if nick_name is not None:
         query = query.where(user_model.User.nick_name == nick_name)
-    if sex:
+    if sex is not None:
         query = query.where(user_model.User.sex == sex)
-    if ban_status:
+    if ban_status is not None:
         query = query.where(user_model.User.ban_status == ban_status)
 
     result: Result = await db.execute(query)
