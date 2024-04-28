@@ -11,6 +11,6 @@ class User(Base):
     cognito_id = Column(String(200))
     email = Column(String(200))
     nick_name = Column(String(30))
-    sex = Column(Integer)
+    sex = Column(Integer, default=2, nullable=False)
     birth = Column(Integer)
     ban_status = Column(Boolean)
