@@ -2,7 +2,11 @@
 
 ### テーブル名: USER_INFO
 #### カラム
-* USER_ID
+* ID
+  * INT
+  * user_infoカラムにおける自動採番ID
+
+* COGNITO_ID
   * VARCHAR(100)
   * cognitoで登録されたユーザーのハッシュ
     

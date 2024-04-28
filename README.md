@@ -34,3 +34,15 @@ $ docker-compose build --no-cache
 $ docker-compose up
 ```
 http://localhost:8000/docs にアクセス
+
+
+# DB関連
+マイグレーション
+```
+docker-compose exec user-api-app poetry run python -m api.migrate_db
+```
+
+起動
+```
+docker-compose exec db mysql demo
+```
