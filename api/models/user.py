@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, text
 from sqlalchemy.orm import relationship
 
 from api.db import Base
@@ -11,6 +11,9 @@ class User(Base):
     cognito_id = Column(String(200))
     email = Column(String(200))
     nick_name = Column(String(30))
-    sex = Column(Integer, default=2, nullable=False)
+    sex = Column(Integer, default=2, server_default=text("2"), nullable=False)
     birth = Column(Integer)
+    area = Column(Integer, default=0, server_default=text("0"), nullable=False)
+    income = Column(Integer, default=0, server_default=text("0"), nullable=False)
+    about_me = Column(String(1000))
     ban_status = Column(Boolean)
