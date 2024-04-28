@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,8 +9,23 @@ router = APIRouter()
 
 
 @router.get("/users", response_model=List[user_schema.UserBase])
-async def get_users():
-    return {"user1": "aaaa", "user2": "bbbb"}
+async def search_users(
+        cognito_id: str = Query(None),
+        email: str = Query(None),
+        nick_name: str = Query(None),
+        sex: int = Query(None),
+        ban_status: bool = Query(None),
+        db: AsyncSession = Depends(get_db)
+):
+    return await user_cruds.search_users(
+        db=db,
+        cognito_id=cognito_id,
+        email=email,
+        nick_name=nick_name,
+        sex=sex,
+        ban_status=ban_status
+    )
+
 
 
 @router.get("/user/{user_id}", response_model=user_schema.UserBase)

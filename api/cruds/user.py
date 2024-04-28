@@ -21,14 +21,38 @@ async def get_user(db: AsyncSession, user_id: int) -> Optional[user_model.User]:
     return result.scalars().first()
 
 
-async def search_users(db: AsyncSession) -> List[user_model.User]:
+async def search_users(
+        db: AsyncSession,
+        cognito_id: Optional[str] = None,
+        email: Optional[str] = None,
+        nick_name: Optional[str] = None,
+        sex: Optional[int] = None,
+        ban_status: Optional[bool] = None
+) -> List[user_model.User]:
     """
     複数ユーザーの検索
 
-    :param db:
-    :return:
+    :param db: データベースセッション
+    :param cognito_id: Cognito ID
+    :param email: メールアドレス
+    :param nick_name: ニックネーム
+    :param sex: 性別
+    :param ban_status: バン状態
     """
-    pass
+    query = select(user_model.User)
+    if cognito_id:
+        query = query.where(user_model.User.cognito_id == cognito_id)
+    if email:
+        query = query.where(user_model.User.email == email)
+    if nick_name:
+        query = query.where(user_model.User.nick_name == nick_name)
+    if sex:
+        query = query.where(user_model.User.sex == sex)
+    if ban_status:
+        query = query.where(user_model.User.ban_status == ban_status)
+
+    result: Result = await db.execute(query)
+    return result.scalars().all()
 
 
 async def create_user(db: AsyncSession, user_create_schema: user_schema.UserCreate) -> user_model.User:
