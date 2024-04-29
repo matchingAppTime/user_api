@@ -89,19 +89,23 @@
 
 ```
 mysql> DESC USER_INFO;
-+------------+---------------+------+-----+---------+----------------+
-| Field      | Type          | Null | Key | Default | Extra          |
-+------------+---------------+------+-----+---------+----------------+
-| id         | int           | NO   | PRI | NULL    | auto_increment |
-| cognito_id | varchar(200)  | YES  |     | NULL    |                |
-| email      | varchar(200)  | YES  |     | NULL    |                |
-| nick_name  | varchar(30)   | YES  |     | NULL    |                |
-| sex        | int           | NO   |     | 2       |                |
-| birth      | int           | YES  |     | NULL    |                |
-| area       | int           | NO   |     | 0       |                |
-| income     | int           | NO   |     | 0       |                |
-| about_me   | varchar(1000) | YES  |     | NULL    |                |
-| ban_status | tinyint(1)    | YES  |     | NULL    |                |
-+------------+---------------+------+-----+---------+----------------+
-10 rows in set (0.00 sec)
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| id             | int           | NO   | PRI | NULL    | auto_increment |
+| cognito_id     | varchar(200)  | YES  |     | NULL    |                |
+| email          | varchar(200)  | YES  |     | NULL    |                |
+| nick_name      | varchar(30)   | YES  |     | NULL    |                |
+| sex            | int           | NO   |     | 0       |                |
+| birth          | int           | YES  |     | NULL    |                |
+| area           | int           | NO   |     | 0       |                |
+| income         | int           | NO   |     | 0       |                |
+| about_me       | varchar(1000) | YES  |     | NULL    |                |
+| prem_status    | int           | NO   |     | 0       |                |
+| penalty_status | int           | NO   |     | 0       |                |
+| is_delete      | int           | NO   |     | 0       |                |
+| ban_status     | tinyint(1)    | YES  |     | NULL    |                |
++----------------+---------------+------+-----+---------+----------------+
+13 rows in set (0.01 sec)
+
 ```
