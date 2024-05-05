@@ -56,6 +56,10 @@
   * VARCHAR(1000)
   * 自己紹介（1,000文字以内）
   
+### 言いにくいパラメータ（基本外に出さないが検索などで利用可能）
+
+* 
+
 
 ### 内部利用パラメータ（外に出さない）
 
@@ -81,6 +85,16 @@
     * 1: イエローカード
     * 2: レッドカード
   
+* FREE_POINT
+  * INT
+  * アプリ内ポイント
+  * 無償配布分
+  
+* PAID_POINT
+  * INT
+  * アプリ内ポイント
+  * 有料購入分
+  
 * BAN_STATUS
   * TINYINT(1)
   * BANしているユーザーかどうか、BAN:0 正常:1
@@ -102,10 +116,10 @@ mysql> DESC USER_INFO;
 | income         | int           | NO   |     | 0       |                |
 | about_me       | varchar(1000) | YES  |     | NULL    |                |
 | prem_status    | int           | NO   |     | 0       |                |
-| penalty_status | int           | NO   |     | 0       |                |
 | is_delete      | int           | NO   |     | 0       |                |
+| penalty_status | int           | NO   |     | 0       |                |
+| free_point     | int           | NO   |     | 0       |                |
+| paid_point     | int           | NO   |     | 0       |                |
 | ban_status     | tinyint(1)    | YES  |     | NULL    |                |
 +----------------+---------------+------+-----+---------+----------------+
-13 rows in set (0.01 sec)
-
 ```
