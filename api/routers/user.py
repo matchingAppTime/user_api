@@ -14,6 +14,14 @@ async def search_users(
         email: str = Query(None),
         nick_name: str = Query(None),
         sex: int = Query(None),
+        birth: int = Query(None),
+        area: int = Query(None),
+        income: int = Query(None),
+        prem_status: int = Query(None),
+        is_delete: int = Query(None),
+        penalty_status: int = Query(None),
+        free_point: int = Query(None),
+        paid_point: int = Query(None),
         ban_status: bool = Query(None),
         db: AsyncSession = Depends(get_db)
 ):
@@ -23,6 +31,14 @@ async def search_users(
         email=email,
         nick_name=nick_name,
         sex=sex,
+        birth=birth,
+        area=area,
+        income=income,
+        prem_status=prem_status,
+        is_delete=is_delete,
+        penalty_status=penalty_status,
+        free_point=free_point,
+        paid_point=paid_point,
         ban_status=ban_status
     )
 

@@ -23,33 +23,24 @@ async def get_user(db: AsyncSession, user_id: int) -> Optional[user_model.User]:
 
 async def search_users(
         db: AsyncSession,
-        cognito_id: Optional[str] = None,
-        email: Optional[str] = None,
-        nick_name: Optional[str] = None,
-        sex: Optional[int] = None,
-        ban_status: Optional[bool] = None
+        **kwargs
 ) -> List[user_model.User]:
     """
     複数ユーザーの検索
 
     :param db: データベースセッション
-    :param cognito_id: Cognito ID
-    :param email: メールアドレス
-    :param nick_name: ニックネーム
-    :param sex: 性別
-    :param ban_status: バン状態
+    :param kwargs: 検索条件
     """
     query = select(user_model.User)
-    if cognito_id is not None:
-        query = query.where(user_model.User.cognito_id == cognito_id)
-    if email is not None:
-        query = query.where(user_model.User.email == email)
-    if nick_name is not None:
-        query = query.where(user_model.User.nick_name == nick_name)
-    if sex is not None:
-        query = query.where(user_model.User.sex == sex)
-    if ban_status is not None:
-        query = query.where(user_model.User.ban_status == ban_status)
+
+    conditions = []
+    for key, value in kwargs.items():
+        if value is not None:
+            if hasattr(user_model.User, key):
+                conditions.append(getattr(user_model.User, key) == value)
+
+    if conditions:
+        query = query.where(*conditions)
 
     result: Result = await db.execute(query)
     return result.scalars().all()
