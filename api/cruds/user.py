@@ -21,10 +21,7 @@ async def get_user(db: AsyncSession, user_id: int) -> Optional[user_model.User]:
     return result.scalars().first()
 
 
-async def search_users(
-        db: AsyncSession,
-        **kwargs
-) -> List[user_model.User]:
+async def search_users(db: AsyncSession, **kwargs) -> List[user_model.User]:
     """
     複数ユーザーの検索
 
@@ -45,6 +42,18 @@ async def search_users(
     result: Result = await db.execute(query)
     return result.scalars().all()
 
+
+async def search_users_by_keyword(db: AsyncSession, keyword: str) -> List[user_model.User]:
+    """
+    自己紹介文に部分一致するユーザーを検索します。
+
+    :param db: データベースセッション
+    :param keyword: 検索キーワード
+    :return: 部分一致するユーザーのリスト
+    """
+    query = select(user_model.User).where(user_model.User.about_me.like(f"%{keyword}%"))
+    result: Result = await db.execute(query)
+    return result.scalars().all()
 
 async def create_user(db: AsyncSession, user_create_schema: user_schema.UserCreate) -> user_model.User:
     """

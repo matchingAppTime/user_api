@@ -38,6 +38,7 @@ class UserCreate(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 
 class UserCreateResponse(BaseModel):
@@ -45,6 +46,7 @@ class UserCreateResponse(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 
 class UserUpdate(BaseModel):
@@ -65,3 +67,4 @@ class UserUpdate(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True

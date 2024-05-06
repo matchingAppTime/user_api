@@ -43,6 +43,16 @@ async def search_users(
     )
 
 
+@router.get("/users/search", response_model=List[user_schema.UserBase])
+async def search_users_by_keyword_route(
+        keyword: str = Query(..., description="検索キーワード"),
+        db: AsyncSession = Depends(get_db)
+    ) -> List[user_schema.UserBase]:
+    """
+    自己紹介文に部分一致するユーザーを検索します
+    """
+    return await user_cruds.search_users_by_keyword(db=db, keyword=keyword)
+
 
 @router.get("/user/{user_id}", response_model=user_schema.UserBase)
 async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
