@@ -15,6 +15,8 @@ class User(Base):
     birth = Column(Integer)
     area = Column(Integer, default=0, server_default=text("0"), nullable=False)
     income = Column(Integer, default=0, server_default=text("0"), nullable=False)
+    height = Column(Integer, default=0, server_default=text("0"), nullable=False)
+    body = Column(Integer, default=0, server_default=text("0"), nullable=False)
     about_me = Column(String(1000))
     prem_status = Column(Integer, default=0, server_default=text("0"), nullable=False)
     is_delete = Column(Integer, default=0, server_default=text("0"), nullable=False)

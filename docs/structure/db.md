@@ -30,6 +30,21 @@
   * INT(8)
   * 生年月日　19990203のような8桁
   
+* HEIGHT
+  * INT
+  * 0: 未登録
+  
+* BODY
+  * INT
+  * 体型
+  * 0: 未登録
+    * 1 ~ 7のenum
+    * 1: やせている
+    * 2: やや痩せている
+    * 3: 普通
+    * 4: ややぽっちゃり
+    * 5: ぽっちゃり
+  
 * AREA
   * INT
   * 0: その他、未登録  
@@ -102,9 +117,6 @@
   
 
 ```
-mysql> DESC USER_INFO;
-+----------------+---------------+------+-----+---------+----------------+
-| Field          | Type          | Null | Key | Default | Extra          |
 +----------------+---------------+------+-----+---------+----------------+
 | id             | int           | NO   | PRI | NULL    | auto_increment |
 | cognito_id     | varchar(200)  | YES  |     | NULL    |                |
@@ -114,6 +126,8 @@ mysql> DESC USER_INFO;
 | birth          | int           | YES  |     | NULL    |                |
 | area           | int           | NO   |     | 0       |                |
 | income         | int           | NO   |     | 0       |                |
+| height         | int           | NO   |     | 0       |                |
+| body           | int           | NO   |     | 0       |                |
 | about_me       | varchar(1000) | YES  |     | NULL    |                |
 | prem_status    | int           | NO   |     | 0       |                |
 | is_delete      | int           | NO   |     | 0       |                |
