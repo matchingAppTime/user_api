@@ -46,3 +46,14 @@ docker-compose exec user-api-app poetry run python -m api.migrate_db
 ```
 docker-compose exec db mysql demo
 ```
+
+
+# デプロイ方法
+使用profileの確認
+```
+$ aws configure list --profile ecr-profile
+```
+CLIからAWS（ECR）へログイン
+```
+ aws ecr get-login-password | docker login --username AWS --password-stdin https://268820476020.dkr.ecr.ap-northeast-1.amazonaws.com
+```
