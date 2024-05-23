@@ -57,3 +57,16 @@ CLIからAWS（ECR）へログイン
 ```
  aws ecr get-login-password | docker login --username AWS --password-stdin https://268820476020.dkr.ecr.ap-northeast-1.amazonaws.com
 ```
+
+AWSのタグつけてビルド -> デプロイ
+```
+docker build -t {AWSのアカウントID}.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest --platform linux/amd64 -f Dockerfile.cloud .
+docker push 268820476020.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest
+```
+
+確認
+```
+aws ecr list-images --repository-name=user-api
+```
+
+あとはECRのコンソールにGO😎
