@@ -7,7 +7,7 @@ from api.routers import user
 app = FastAPI()
 app.include_router(user.router)
 
-# handler = Mangum(app)
+handler = Mangum(app)
 app.add_middleware(
     CORSMiddleware,
     # TODO web ios adr のオリジンがわかれば記載
