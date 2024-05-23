@@ -15,7 +15,8 @@ $ docker-compose run \
     --dependency uvicorn[standard] \
     --dependency sqlalchemy \
     --dependency aiomysql \
-    --dependency pymysql" \
+    --dependency pymysql \
+    --dependency Mangum" \
   user-api-app
 ```
 
@@ -35,6 +36,12 @@ $ docker-compose up
 ```
 http://localhost:8000/docs にアクセス
 
+
+便利情報
+poetryで途中で入れたいライブラリが出てきたら
+```
+$ docker-compose exec user-api poetry add mangu  
+```
 
 # DB関連
 マイグレーション
