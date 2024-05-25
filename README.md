@@ -55,7 +55,9 @@ docker-compose exec db mysql demo
 ```
 
 
-# デプロイ方法
+# デプロイ方法（アプリに変更があったらこれをする）
+
+
 使用profileの確認
 ```
 $ aws configure list --profile ecr-profile
@@ -67,7 +69,7 @@ CLIからAWS（ECR）へログイン
 
 AWSのタグつけてビルド -> デプロイ
 ```
-docker build -t {AWSのアカウントID}.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest --platform linux/amd64 -f Dockerfile.cloud .
+docker build -t 268820476020.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest --platform linux/amd64 -f Dockerfile.cloud .
 docker push 268820476020.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest
 ```
 
