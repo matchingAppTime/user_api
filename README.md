@@ -36,6 +36,15 @@ $ docker-compose up
 ```
 http://localhost:8000/docs にアクセス
 
+RIE
+```
+$ docker run -p 9000:8080 268820476020.dkr.ecr.ap-northeast-1.amazonaws.com/user-api
+```
+```
+curl -XPOST \
+"http://localhost:9000/2015-03-31/functions/function/invocations" \
+-d '{"resource": "/", "path": "/", "httpMethod": "GET", "requestContext": {}}'
+```
 
 便利情報
 poetryで途中で入れたいライブラリが出てきたら
@@ -59,7 +68,7 @@ docker-compose exec db mysql demo
 
 タグ付きのビルド
 ```
-docker build -t {ID}.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest -f Dockerfile.cloud .
+docker build -t 268820476020.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest -f Dockerfile.cloud .
 ```
 
 使用profileの確認

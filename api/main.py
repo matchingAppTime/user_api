@@ -10,7 +10,7 @@ app.include_router(user.router)
 app.add_middleware(
     CORSMiddleware,
     # TODO web ios adr のオリジンがわかれば記載
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=[""]

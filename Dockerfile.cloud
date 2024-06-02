@@ -19,4 +19,4 @@ COPY api ${LAMBDA_TASK_ROOT}
 RUN poetry config virtualenvs.in-project true
 RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
 
-CMD ["main.handler"]
+CMD ["api.main.handler"]
