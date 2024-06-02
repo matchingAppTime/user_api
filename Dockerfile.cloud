@@ -1,6 +1,6 @@
 # AWS利用向けのdockerfile
 
-# python3.11のイメージをダウンロード
+# python3.12のイメージをダウンロード
 FROM public.ecr.aws/lambda/python:3.12
 # pythonの出力表示をDocker用に調整
 ENV PYTHONUNBUFFERED=1
@@ -14,13 +14,9 @@ RUN pip install poetry
 COPY pyproject.toml* poetry.lock* ${LAMBDA_TASK_ROOT}
 
 COPY api ${LAMBDA_TASK_ROOT}
-COPY entrypoint.sh ${LAMBDA_TASK_ROOT}
 
 # poetryでライブラリをインストール (pyproject.tomlが既にある場合)
 RUN poetry config virtualenvs.in-project true
 RUN if [ -f pyproject.toml ]; then poetry install --no-root; fi
-
-# uvicornのサーバーを立ち上げる
-ENTRYPOINT ["bash", "entrypoint.sh"]
 
 CMD ["main.handler"]
