@@ -7,7 +7,6 @@ from api.routers import user
 app = FastAPI()
 app.include_router(user.router)
 
-handler = Mangum(app)
 app.add_middleware(
     CORSMiddleware,
     # TODO web ios adr のオリジンがわかれば記載
@@ -16,3 +15,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=[""]
 )
+
+handler = Mangum(app)

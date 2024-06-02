@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # マイグレーション実施
 poetry run python -am api.migrate_cloud_db
 
