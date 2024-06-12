@@ -1,11 +1,11 @@
-# Dockerfile
+# Dockerfile.lambda
 # python3.11のイメージをダウンロード
-FROM python:3.11-buster
+FROM public.ecr.aws/lambda/python:3.11
 
 # pythonの出力表示をDocker用に調整
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /src
+WORKDIR /var/task
 
 # 必要なライブラリをインストール
 COPY requirements.txt ./
@@ -14,5 +14,5 @@ RUN pip install -r requirements.txt
 # FastAPIアプリケーションのコードをコピー
 COPY . .
 
-# ローカル開発用のエントリーポイントを設定
-CMD ["uvicorn", "lambda_handler:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Lambdaのエントリーポイントを設定
+CMD ["lambda_handler.handler"]

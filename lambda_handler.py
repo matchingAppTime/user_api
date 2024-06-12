@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.routers import user
 
-app = FastAPI(openapi_prefix="/dev/")
+app = FastAPI()
 app.include_router(user.router)
 
 app.add_middleware(

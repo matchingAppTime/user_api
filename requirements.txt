@@ -4,3 +4,4 @@ mangum
 pymysql
 sqlalchemy
 aiomysql
+cryptography
