@@ -58,7 +58,7 @@ async def search_users_by_keyword_route(
     return await user_cruds.search_users_by_keyword(db=db, keyword=keyword)
 
 
-@router.get("/user/{user_id}", response_model=user_schema.UserBase)
+@router.get("/user/{user_id}", response_model=user_schema.UserResponse)
 async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     user = await user_cruds.get_user(db=db, user_id=user_id)
     if user is None:

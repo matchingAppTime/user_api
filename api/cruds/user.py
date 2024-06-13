@@ -7,7 +7,7 @@ import api.models.user as user_model
 import api.schemas.user as user_schema
 
 
-async def get_user(db: AsyncSession, user_id: int) -> Optional[user_model.User]:
+async def get_user(db: AsyncSession, user_id: int) -> Optional[user_schema.UserResponse]:
     """
     単一userのget
 
@@ -18,10 +18,12 @@ async def get_user(db: AsyncSession, user_id: int) -> Optional[user_model.User]:
     result: Result = await db.execute(
         select(user_model.User).filter(user_model.User.id == user_id)
     )
-    return result.scalars().first()
+    user = result.scalars().first()
+
+    return _mapping_user_response_schema(user)
 
 
-async def search_users(db: AsyncSession, **kwargs) -> List[user_model.User]:
+async def search_users(db: AsyncSession, **kwargs) -> List[user_schema.UserResponse]:
     """
     複数ユーザーの検索
 
@@ -40,10 +42,13 @@ async def search_users(db: AsyncSession, **kwargs) -> List[user_model.User]:
         query = query.where(*conditions)
 
     result: Result = await db.execute(query)
-    return result.scalars().all()
+    users = result.scalars().all()
+    user_responses = [_mapping_user_response_schema(user) for user in users]
+
+    return user_responses
 
 
-async def search_users_by_keyword(db: AsyncSession, keyword: str) -> List[user_model.User]:
+async def search_users_by_keyword(db: AsyncSession, keyword: str) -> List[user_schema.UserResponse]:
     """
     自己紹介文に部分一致するユーザーを検索します。
 
@@ -53,9 +58,13 @@ async def search_users_by_keyword(db: AsyncSession, keyword: str) -> List[user_m
     """
     query = select(user_model.User).where(user_model.User.about_me.like(f"%{keyword}%"))
     result: Result = await db.execute(query)
-    return result.scalars().all()
+    users = result.scalars().all()
+    user_responses = [_mapping_user_response_schema(user) for user in users]
 
-async def create_user(db: AsyncSession, user_create_schema: user_schema.UserCreate) -> user_model.User:
+    return user_responses
+
+
+async def create_user(db: AsyncSession, user_create_schema: user_schema.UserCreate) -> user_schema.UserResponse:
     """
     ユーザーの作成
 
@@ -63,9 +72,35 @@ async def create_user(db: AsyncSession, user_create_schema: user_schema.UserCrea
     :param user_create_schema: リクエスト
     :return: 作成したユーザー
     """
-    new_user = user_model.User(**user_create_schema.model_dump())
-    db.add(new_user)
-    await db.commit()
-    await db.refresh(new_user)
-    return new_user
+    user_data = user_create_schema.model_dump()
+    profile_data = user_data.pop("profile")
+    attributes_data = user_data.pop("attributes")
+    status_data = user_data.pop("status")
 
+    new_user_data = {**profile_data, **attributes_data, **status_data}
+    new_user_flatten = user_model.User(**new_user_data)
+    db.add(new_user_flatten)
+    await db.commit()
+    await db.refresh(new_user_flatten)
+    return _mapping_user_response_schema(new_user_flatten)
+
+
+def _mapping_user_response_schema(user: user_model.User) -> user_schema.UserResponse:
+    """
+    DB形式のuserをschemasに変換
+    :param user_model: DB形式のuser
+    :return: schemasに合わせたuserResponse
+    """
+    user_data = user.__dict__
+
+    # マッピング
+    profile_data = {field: user_data[field] for field in user_schema.UserProfile.model_fields.keys()}
+    attributes_data = {field: user_data[field] for field in user_schema.UserAttributes.model_fields.keys()}
+    status_data = {field: user_data[field] for field in user_schema.UserStatus.model_fields.keys()}
+
+    return user_schema.UserResponse(
+        id=user_data["id"],
+        profile=profile_data,
+        attributes=attributes_data,
+        status=status_data
+    )
