@@ -20,6 +20,7 @@ services:
       DB_PASSWORD: password
       DB_HOST: db
       DB_PORT: 3306
+      OPENAPI_PREFIX: "" #ローカルのみの措置
     ports:
       - "8000:8000"
     depends_on:

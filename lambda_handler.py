@@ -1,10 +1,13 @@
+import os
 from fastapi import FastAPI
 from mangum import Mangum
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.routers import user
 
-app = FastAPI()
+openapi_prefix = os.environ.get("OPENAPI_PREFIX", "")
+
+app = FastAPI(openapi_prefix=openapi_prefix)
 app.include_router(user.router)
 
 app.add_middleware(
