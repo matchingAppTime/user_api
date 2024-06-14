@@ -8,46 +8,18 @@ from api.db import get_db
 router = APIRouter()
 
 
-@router.get("/users", response_model=List[user_schema.UserBase])
+@router.get("/users", response_model=List[user_schema.UserResponse])
 async def search_users(
-        cognito_id: str = Query(None),
-        email: str = Query(None),
-        nick_name: str = Query(None),
-        sex: int = Query(None),
-        birth: int = Query(None),
-        area: int = Query(None),
-        income: int = Query(None),
-        height: int = Query(None),
-        body: int = Query(None),
-        prem_status: int = Query(None),
-        is_delete: int = Query(None),
-        penalty_status: int = Query(None),
-        free_point: int = Query(None),
-        paid_point: int = Query(None),
-        ban_status: bool = Query(None),
+        query: user_schema.UserSearchRequest = Depends(),
         db: AsyncSession = Depends(get_db)
 ):
     return await user_cruds.search_users(
         db=db,
-        cognito_id=cognito_id,
-        email=email,
-        nick_name=nick_name,
-        sex=sex,
-        birth=birth,
-        area=area,
-        income=income,
-        height=height,
-        body=body,
-        prem_status=prem_status,
-        is_delete=is_delete,
-        penalty_status=penalty_status,
-        free_point=free_point,
-        paid_point=paid_point,
-        ban_status=ban_status
+        **query.model_dump(exclude_unset=True)
     )
 
 
-@router.get("/users/search", response_model=List[user_schema.UserBase])
+@router.get("/users/search", response_model=List[user_schema.UserResponse])
 async def search_users_by_keyword_route(
         keyword: str = Query(..., description="検索キーワード"),
         db: AsyncSession = Depends(get_db)
@@ -73,10 +45,16 @@ async def create_user(body: user_schema.UserCreate, db: AsyncSession = Depends(g
 
 
 @router.put("/user/{user_id}")
-async def update_user(user_id: int):
-    return f"ユーザーをアップデートしました {user_id}"
+async def update_user(user_id: int, body: user_schema.UserUpdate, db: AsyncSession = Depends(get_db)):
+    updated_user_response = await user_cruds.update_user(db=db, user_id=user_id, user_update_schema=body)
+    if updated_user_response is None:
+        raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
+    return updated_user_response
 
 
 @router.delete("/user/{user_id}")
-async def delete_user(user_id: int):
-    return f"ユーザーを削除しました {user_id}"
+async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
+    deleted_user_response = await user_cruds.delete_user(db=db, user_id=user_id)
+    if deleted_user_response is None:
+        raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
+    return deleted_user_response

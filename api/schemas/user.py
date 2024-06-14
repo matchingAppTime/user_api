@@ -46,6 +46,24 @@ class UserBase(BaseModel):
         from_attributes = True
 
 
+class UserSearchRequest(BaseModel):
+    cognito_id: Optional[str] = None
+    email: Optional[str] = None
+    nick_name: Optional[str] = None
+    sex: Optional[int] = None
+    birth: Optional[int] = None
+    area: Optional[int] = None
+    income: Optional[int] = None
+    height: Optional[int] = None
+    body: Optional[int] = None
+    prem_status: Optional[int] = None
+    is_delete: Optional[int] = None
+    penalty_status: Optional[int] = None
+    free_point: Optional[int] = None
+    paid_point: Optional[int] = None
+    ban_status: Optional[bool] = None
+
+
 class UserCreate(UserBase):
     pass
 
@@ -62,9 +80,18 @@ class UserUpdate(UserBase):
     pass
 
 
+class UserDeleteResponse(BaseModel):
+    id: int
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
+
 class UserResponse(UserBase):
     id: int
 
     class Config:
         orm_mode = True
         from_attributes = True
+

@@ -1,4 +1,3 @@
-# Dockerfile.lambda
 # python3.11のイメージをダウンロード
 FROM public.ecr.aws/lambda/python:3.11
 
