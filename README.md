@@ -32,35 +32,27 @@ docker-compose exec db mysql demo
 
 # デプロイ方法（アプリに変更があったらこれをする）
 ECRリポジトリ名: user-api
-IDとURL仕込み
-```
-ID=ほげ
-ECR=URI=$(aws ecr describe-repositories --repository-name user-api --query 'repositories[0].repositoryUri' --output text)
-```
 
-タグ付きのビルド
-```
-docker build -t ${ID}.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest -f Dockerfile.lambda .
-```
-
-使用profileの確認
-```
-$ aws configure list --profile ecr-profile
-```
 CLIからAWS（ECR）へログイン
 ```
- aws ecr get-login-password | docker login --username AWS --password-stdin https://268820476020.dkr.ecr.ap-northeast-1.amazonaws.com
+aws ecr get-login-password | docker login --username AWS --password-stdin https://268820476020.dkr.ecr.ap-northeast-1.amazonaws.com
 ```
+
+URL仕込み
+```
+ECR_URI=$(aws ecr describe-repositories --repository-name user-api --query 'repositories[0].repositoryUri' --output text)
+```
+
+lambda用dokerfileでビルド
+```
+docker build -t user-api -f Dockerfile.lambda .
+```
+
 
 AWSのタグつけてビルド -> デプロイ
 ```
-docker build -t ${ID}.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest --platform linux/amd64 -f Dockerfile.cloud .
-docker push ${ID}.dkr.ecr.ap-northeast-1.amazonaws.com/user-api:latest
-```
-
-確認
-```
-aws ecr list-images --repository-name=user-api
+docker tag user-api:latest ${ECR_URI}:latest
+docker push ${ECR_URI}:latest
 ```
 
 あとはECRのコンソールにGO😎
