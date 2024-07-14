@@ -7,6 +7,9 @@ import api.cruds.user as user_cruds
 from api.db import get_db
 router = APIRouter()
 
+@router.get("/")
+async def health_check():
+    return "OK."
 
 @router.get("/users", response_model=List[user_schema.UserResponse])
 async def search_users(

@@ -45,7 +45,7 @@ ECR_URI=$(aws ecr describe-repositories --repository-name user-api --query 'repo
 
 lambda用dokerfileでビルド
 ```
-docker build -t user-api -f Dockerfile.lambda .
+docker build -t user-api -f Dockerfile.lambda . --no-cache
 ```
 
 

@@ -5,9 +5,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.routers import user
 
-openapi_prefix = os.environ.get("OPENAPI_PREFIX", "")
+agw_stage = os.environ.get("AGW_STAGE", "")
 
-app = FastAPI(openapi_prefix=openapi_prefix)
+app = FastAPI(openapi_prefix=agw_stage)
 app.include_router(user.router)
 
 app.add_middleware(

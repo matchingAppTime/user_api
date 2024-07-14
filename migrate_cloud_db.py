@@ -5,7 +5,7 @@ from api.models.user import Base
 from api.db import DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
 DB_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/?charset=utf8"
-APP_DB_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/userdb?charset=utf8"
+APP_DB_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/demo?charset=utf8"
 
 engine = create_engine(APP_DB_URL, echo=True)
 
