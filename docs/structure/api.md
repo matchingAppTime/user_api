@@ -15,11 +15,11 @@
     └── user.py
 ```
 
-* main
+* lambda_handler
   * 実行ファイル
     
 * db, migrate_db
-  * db関連ファイル
+  * db関連ファイル（別関数にわけるかも）
     
 * routers
   * コントローラー定義 mvcのcあたり

@@ -1,0 +1,7 @@
+uvicorn
+fastapi
+mangum
+pymysql
+sqlalchemy
+aiomysql
+cryptography
