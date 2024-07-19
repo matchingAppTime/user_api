@@ -37,3 +37,26 @@
 
 user関連のパス
 http://localhost:8000/docs
+
+# 認証
+* / GET
+  * 不要
+  
+* /users GET
+  * ログイン必要
+  
+* /users/search GET
+  * ログイン必要
+  
+* /users/{user_id} GET
+  * ログイン必要
+  
+* /user POST
+  * ログイン必要
+  
+* /user/{user_id} PUT
+  * ログイン必要
+  
+* /user/{user_id} DELETE
+  * ログイン必要
+  
