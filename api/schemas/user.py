@@ -21,7 +21,7 @@ class UserAttributes(BaseModel):
     area: Optional[int] = Field(0, example=47)
     income: Optional[int] = Field(0, example=2)
     height: Optional[int] = Field(0, example=165)
-    body: Optional[int] = Field(0, example=3, description="未登録:0 やせている:1 ぽっちゃり:2")
+    body: Optional[int] = Field(0, example=3, description="1~7")
 
 
 class UserStatus(BaseModel):
@@ -65,7 +65,12 @@ class UserSearchRequest(BaseModel):
 
 
 class UserCreate(UserBase):
-    pass
+    # cognitoのIDトークン
+    idToken: str
+
+    class Config:
+        orm_mode = True
+        from_attributes = True
 
 
 class UserCreateResponse(BaseModel):
