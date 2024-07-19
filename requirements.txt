@@ -5,3 +5,6 @@ pymysql
 sqlalchemy
 aiomysql
 cryptography
+boto3
+python-jose
+requests

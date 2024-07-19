@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import api.schemas.user as user_schema
 import api.cruds.user as user_cruds
 from api.db import get_db
+from api.cognito_utils import get_current_user, get_user_info_from_id_token
 router = APIRouter()
 
 @router.get("/")
@@ -42,13 +43,23 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/user", response_model=user_schema.UserCreateResponse)
-async def create_user(body: user_schema.UserCreate, db: AsyncSession = Depends(get_db)):
-    created_user_response = await user_cruds.create_user(db=db, user_create_schema=body)
-    return created_user_response
+async def create_user(
+        body: user_schema.UserCreate,
+        db: AsyncSession = Depends(get_db),
+        # current_user: dict = Depends(get_current_user)
+):
+    user_info = get_user_info_from_id_token(body.idToken)
+    print(user_info)
+    # created_user_response = await user_cruds.create_user(db=db, user_create_schema=body)
+    # return created_user_response
 
 
 @router.put("/user/{user_id}")
-async def update_user(user_id: int, body: user_schema.UserUpdate, db: AsyncSession = Depends(get_db)):
+async def update_user(
+        user_id: int,
+        body: user_schema.UserUpdate,
+        db: AsyncSession = Depends(get_db),
+):
     updated_user_response = await user_cruds.update_user(db=db, user_id=user_id, user_update_schema=body)
     if updated_user_response is None:
         raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
