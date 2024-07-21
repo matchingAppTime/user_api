@@ -5,12 +5,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import api.schemas.user as user_schema
 import api.cruds.user as user_cruds
 from api.db import get_db
-from api.cognito_utils import get_current_user, get_user_info_from_id_token
+from api.cognito_utils import get_user_info_from_id_token
 router = APIRouter()
+
 
 @router.get("/")
 async def health_check():
     return "OK."
+
 
 @router.get("/users", response_model=List[user_schema.UserResponse])
 async def search_users(
@@ -46,12 +48,12 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
 async def create_user(
         body: user_schema.UserCreate,
         db: AsyncSession = Depends(get_db),
-        # current_user: dict = Depends(get_current_user)
 ):
     user_info = get_user_info_from_id_token(body.idToken)
-    print(user_info)
-    # created_user_response = await user_cruds.create_user(db=db, user_create_schema=body)
-    # return created_user_response
+    body.profile.cognito_id = user_info["cognito_id"]
+    body.profile.email = user_info["email"]
+    created_user_response = await user_cruds.create_user(db=db, user_create_schema=body)
+    return created_user_response
 
 
 @router.put("/user/{user_id}")

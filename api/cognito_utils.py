@@ -1,8 +1,6 @@
 import boto3
 import requests
-import json
 from jose import JWTError, jwt, jwk
-from jose.utils import base64url_decode
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
