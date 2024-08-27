@@ -56,3 +56,13 @@ docker push ${ECR_URI}:latest
 ```
 
 あとはECRのコンソールにGO😎
+
+## lambdaで更新する
+
+* lambdaからuser-apiを選択
+* 「新しいイメージをデプロイ」をクリックし、先ほどpushしたコンテナを選択
+
+## agwで更新する
+
+特に必要ない
+https://3yp95e1kb0.execute-api.ap-northeast-1.amazonaws.com/stg/ で確認できる
