@@ -1,10 +1,10 @@
-from sqlalchemy import select
-from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional, List
+from fastapi import HTTPException
 
 import api.models.user as user_model
 import api.schemas.user as user_schema
+import api.repositories.db_operations as db_ops
 
 
 async def get_user(db: AsyncSession, user_id: int) -> Optional[user_schema.UserResponse]:
@@ -15,11 +15,9 @@ async def get_user(db: AsyncSession, user_id: int) -> Optional[user_schema.UserR
     :param user_id: id
     :return: 単一ユーザー（Optional[user_model.User]）
     """
-    result: Result = await db.execute(
-        select(user_model.User).filter(user_model.User.id == user_id)
-    )
-    user = result.scalars().first()
-
+    user = await db_ops.get_user_by_id(db, user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
     return _mapping_user_response_schema(user)
 
 
@@ -30,21 +28,14 @@ async def search_users(db: AsyncSession, **kwargs) -> List[user_schema.UserRespo
     :param db: データベースセッション
     :param kwargs: 検索条件
     """
-    query = select(user_model.User)
-
     conditions = []
     for key, value in kwargs.items():
         if value is not None:
             if hasattr(user_model.User, key):
                 conditions.append(getattr(user_model.User, key) == value)
 
-    if conditions:
-        query = query.where(*conditions)
-
-    result: Result = await db.execute(query)
-    users = result.scalars().all()
-    user_responses = [_mapping_user_response_schema(user) for user in users]
-    return user_responses
+    users = await db_ops.search_users_by_conditions(db, conditions)
+    return [_mapping_user_response_schema(user) for user in users]
 
 
 async def search_users_by_keyword(db: AsyncSession, keyword: str) -> List[user_schema.UserResponse]:
@@ -55,12 +46,8 @@ async def search_users_by_keyword(db: AsyncSession, keyword: str) -> List[user_s
     :param keyword: 検索キーワード
     :return: 部分一致するユーザーのリスト
     """
-    query = select(user_model.User).where(user_model.User.about_me.like(f"%{keyword}%"))
-    result: Result = await db.execute(query)
-    users = result.scalars().all()
-    user_responses = [_mapping_user_response_schema(user) for user in users]
-
-    return user_responses
+    users = await db_ops.search_users_by_keyword(db, keyword)
+    return [_mapping_user_response_schema(user) for user in users]
 
 
 async def create_user(db: AsyncSession, user_create_schema: user_schema.UserCreate) -> user_schema.UserResponse:
@@ -77,12 +64,8 @@ async def create_user(db: AsyncSession, user_create_schema: user_schema.UserCrea
     status_data = user_data.pop("status")
 
     new_user_data = {**profile_data, **attributes_data, **status_data}
-    new_user_flatten = user_model.User(**new_user_data)
-    db.add(new_user_flatten)
-    await db.commit()
-    await db.refresh(new_user_flatten)
-    return _mapping_user_response_schema(new_user_flatten)
-
+    new_user = await db_ops.create_user_in_db(db, new_user_data)
+    return _mapping_user_response_schema(new_user)
 
 async def update_user(db: AsyncSession,
                       user_id: int,
@@ -95,26 +78,19 @@ async def update_user(db: AsyncSession,
     :param user_update_schema: リクエスト
     :return:
     """
-    result: Result = await db.execute(
-        select(user_model.User).filter(user_model.User.id == user_id)
-    )
-    user = result.scalars().first()
-
+    user = await db_ops.get_user_by_id(db, user_id)
     if user is None:
-        return None
+        raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
 
     user_data = user_update_schema.model_dump()
     profile_data = user_data.pop("profile")
     attributes_data = user_data.pop("attributes")
     status_data = user_data.pop("status")
 
-    for key, value in {**profile_data, **attributes_data, **status_data}.items():
-        setattr(user, key, value)
+    update_user_data = {**profile_data, **attributes_data, **status_data}
 
-    db.add(user)
-    await db.commit()
-    await db.refresh(user)
-    return _mapping_user_response_schema(user)
+    updated_user = await db_ops.update_user_in_db(db, user, update_user_data)
+    return _mapping_user_response_schema(updated_user)
 
 
 async def delete_user(db: AsyncSession, user_id: int) -> user_schema.UserDeleteResponse:
@@ -124,16 +100,11 @@ async def delete_user(db: AsyncSession, user_id: int) -> user_schema.UserDeleteR
     :param user_id: id
     :return: レスポンス
     """
-    result: Result = await db.execute(
-        select(user_model.User).filter(user_model.User.id == user_id)
-    )
-    user = result.scalars().first()
-
+    user = await db_ops.get_user_by_id(db, user_id)
     if user is None:
-        return None
+        raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
 
-    await db.delete(user)
-    await db.commit()
+    await db_ops.delete_user_in_db(db, user)
     return user_schema.UserDeleteResponse(id=user_id)
 
 
