@@ -108,6 +108,17 @@ async def delete_user(db: AsyncSession, user_id: int) -> user_schema.UserDeleteR
     return user_schema.UserDeleteResponse(id=user_id)
 
 
+async def check_user_exists(db: AsyncSession, user_id: int) -> bool:
+    """
+    ユーザーの存在検索
+    :param db: db
+    :param user_id: id
+    :return: いればtrue
+    """
+    user = await db_ops.get_user_by_id(db, user_id)
+    return user is not None
+
+
 def _mapping_user_response_schema(user: user_model.User) -> user_schema.UserResponse:
     """
     DB形式のuserをschemasに変換
