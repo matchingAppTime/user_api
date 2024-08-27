@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import api.schemas.user as user_schema
 import api.cruds.user as user_cruds
 from api.db import get_db
-from api.cognito_utils import get_user_info_from_id_token
+
 router = APIRouter()
 
 
@@ -49,9 +49,6 @@ async def create_user(
         body: user_schema.UserCreate,
         db: AsyncSession = Depends(get_db),
 ):
-    user_info = get_user_info_from_id_token(body.idToken)
-    body.profile.cognito_id = user_info["cognito_id"]
-    body.profile.email = user_info["email"]
     created_user_response = await user_cruds.create_user(db=db, user_create_schema=body)
     return created_user_response
 

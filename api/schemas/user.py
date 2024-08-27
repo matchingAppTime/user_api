@@ -65,13 +65,7 @@ class UserSearchRequest(BaseModel):
 
 
 class UserCreate(UserBase):
-    # cognitoのIDトークン
-    idToken: str
-
-    class Config:
-        orm_mode = True
-        from_attributes = True
-
+    pass
 
 class UserCreateResponse(BaseModel):
     id: int
