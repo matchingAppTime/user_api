@@ -1,3 +1,5 @@
 .venv
 .dockervenv
 .idea
+
+__pycache__
