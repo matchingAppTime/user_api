@@ -39,8 +39,6 @@ async def search_users_by_keyword_route(
 @router.get("/user/{user_id}", response_model=user_schema.UserResponse)
 async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     user = await user_cruds.get_user(db=db, user_id=user_id)
-    if user is None:
-        raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
     return user
 
 
@@ -60,14 +58,10 @@ async def update_user(
         db: AsyncSession = Depends(get_db),
 ):
     updated_user_response = await user_cruds.update_user(db=db, user_id=user_id, user_update_schema=body)
-    if updated_user_response is None:
-        raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
     return updated_user_response
 
 
 @router.delete("/user/{user_id}")
 async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
     deleted_user_response = await user_cruds.delete_user(db=db, user_id=user_id)
-    if deleted_user_response is None:
-        raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
     return deleted_user_response
