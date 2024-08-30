@@ -20,6 +20,19 @@ async def get_user(db: AsyncSession, user_id: int) -> Optional[user_schema.UserR
         raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
     return _mapping_user_response_schema(user)
 
+async def get_user_by_cognito_id(db: AsyncSession, cognito_id: str) -> Optional[user_schema.UserResponse]:
+    """
+    単一userのget
+
+    :param db: db
+    :param user_id: id
+    :return: 単一ユーザー（Optional[user_model.User]）
+    """
+    user = await db_ops.get_user_by_cognito_id(db, cognito_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="ユーザーが存在しません.")
+    return _mapping_user_response_schema(user)
+
 
 async def search_users(db: AsyncSession, **kwargs) -> List[user_schema.UserResponse]:
     """

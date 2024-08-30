@@ -42,6 +42,12 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     return user
 
 
+@router.get("/user/cognito/{cognito_id}", response_model=user_schema.UserResponse)
+async def get_user(cognito_id: str, db: AsyncSession = Depends(get_db)):
+    user = await user_cruds.get_user_by_cognito_id(db=db, cognito_id=cognito_id)
+    return user
+
+
 @router.get("/user/{cognito_id}/exists")
 async def check_user_exists(cognito_id: str, db: AsyncSession = Depends(get_db)):
     exists = await user_cruds.check_user_exists(db=db, cognito_id=cognito_id)
