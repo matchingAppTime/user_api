@@ -13,6 +13,13 @@ async def get_user_by_id(db: AsyncSession, user_id: int) -> Optional[user_model.
     return result.scalars().first()
 
 
+async def get_user_by_cognito_id(db: AsyncSession, cognito_id: str) -> Optional[user_model.User]:
+    result: Result = await db.execute(
+        select(user_model.User).filter(user_model.User.cognito_id == cognito_id)
+    )
+    return result.scalars().first()
+
+
 async def search_users_by_conditions(db: AsyncSession, conditions: List) -> List[user_model.User]:
     query = select(user_model.User).where(*conditions)
     result: Result = await db.execute(query)

@@ -42,9 +42,9 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     return user
 
 
-@router.get("/user/{user_id}/exists")
-async def check_user_exists(user_id: int, db: AsyncSession = Depends(get_db)):
-    exists = await user_cruds.check_user_exists(db=db, user_id=user_id)
+@router.get("/user/{cognito_id}/exists")
+async def check_user_exists(cognito_id: str, db: AsyncSession = Depends(get_db)):
+    exists = await user_cruds.check_user_exists(db=db, cognito_id=cognito_id)
     return {"exists": exists}
 
 
